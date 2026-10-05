@@ -1,0 +1,234 @@
+
+<div class="search-container">
+    <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="searchInput" placeholder="Search components, navbar, hero..." autocomplete="off" />
+        <button class="search-btn" id="searchBtn">
+            <span>Search</span>
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+    <div class="search-results-dropdown" id="searchResults"></div>
+</div>
+
+<script>
+const searchableData = [
+  { title: "Navbar Component", desc: "Glassmorphic responsive navigation bar", icon: "fa-compass", link: "#home" },
+  { title: "Hero Section", desc: "Modern hero section with action buttons", icon: "fa-rocket", link: "#home" },
+  { title: "Services Cards", desc: "Grid list of services with icons", icon: "fa-cubes", link: "#services" },
+  { title: "Stats Counter", desc: "Social proof statistics display", icon: "fa-chart-line", link: "#stats" },
+  { title: "Portfolio Carousel", desc: "Image slider with captions", icon: "fa-images", link: "#portfolio" },
+  { title: "FAQ Accordion", desc: "Collapsible questions and answers", icon: "fa-circle-question", link: "#faq" },
+  { title: "Contact Form", desc: "Interactive glass form interface", icon: "fa-paper-plane", link: "#contact" },
+  { title: "Footer Section", desc: "Footer links with social icons", icon: "fa-anchor", link: "#footer" }
+];
+
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+searchInput.addEventListener('input', function(e) {
+  const query = e.target.value.toLowerCase().trim();
+  if (query.length === 0) {
+    searchResults.classList.remove('active');
+    searchResults.innerHTML = '';
+    return;
+  }
+  const filteredData = searchableData.filter(item => 
+    item.title.toLowerCase().includes(query) || 
+    item.desc.toLowerCase().includes(query)
+  );
+  renderResults(filteredData);
+});
+
+function renderResults(results) {
+  if (results.length === 0) {
+    searchResults.innerHTML = '<div class="no-result"><i class="fa-solid fa-triangle-exclamation"></i> No matching components found.</div>';
+  } else {
+    searchResults.innerHTML = results.map(item => `
+      <a href="${item.link}" class="result-item">
+        <i class="fa-solid ${item.icon} result-icon"></i>
+        <div class="result-info">
+          <h4>${item.title}</h4>
+          <p>${item.desc}</p>
+        </div>
+      </a>
+    `).join('');
+  }
+  searchResults.classList.add('active');
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.search-container')) {
+    searchResults.classList.remove('active');
+  }
+});
+</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Project</title>
+    <link rel="stylesheet" href="style.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --glass-bg: rgba(15, 23, 42, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --transition: all 0.3s ease;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  position: relative;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 50px;
+  padding: 0.5rem 0.6rem 0.5rem 1.2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  transition: var(--transition);
+}
+
+.search-box:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.search-icon {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-right: 0.8rem;
+}
+
+.search-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-main);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.search-box input::placeholder {
+  color: #64748b;
+}
+
+.search-btn {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+  color: #fff;
+  border: none;
+  border-radius: 40px;
+  padding: 0.7rem 1.4rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: var(--transition);
+}
+
+.search-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+.search-results-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 1rem;
+  right: 1rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 1000;
+}
+
+.search-results-dropdown.active {
+  display: block;
+}
+
+.result-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 1.2rem;
+  color: var(--text-main);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.result-item:last-child {
+  border-bottom: none;
+}
+
+.result-item:hover {
+  background: rgba(99, 102, 241, 0.15);
+  padding-left: 1.5rem;
+}
+
+.result-icon {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.result-info h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-main);
+}
+
+.result-info p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.no-result {
+  padding: 1.2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 576px) {
+  .search-btn span { display: none; }
+  .search-btn { padding: 0.7rem 1rem; border-radius: 50%; }
+}
+</style>
+</head>
+<body>
+
+    <!-- Content goes here -->
+
+    <script src="script.js"></script>
+</body>
+</html>
